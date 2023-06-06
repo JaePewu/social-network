@@ -146,8 +146,10 @@ export const wallZone = () => {
     containerImgAndUser.classList.add('imgAndUser');
     containerImgAndUser.setAttribute('id', 'imgAndUser');
 
-    // const imgUserCopia = imgUserForm.cloneNode(true);
-    // imgUserCopia.classList.add('imgUserCopia');
+    const imgUserCopia = document.createElement('img');
+    imgUserCopia.classList.add('imgUserCopia');
+    imgUserCopia.setAttribute('src', '../../image/fotoUsuario.png');
+    containerImgAndUser.appendChild(imgUserCopia);
 
     // nombre del usuario
     const nameUser = document.createElement('h2');
@@ -155,7 +157,6 @@ export const wallZone = () => {
     nameUser.setAttribute('id', 'nameUser');
     nameUser.textContent = postData.author;
 
-    // containerImgAndUser.appendChild(imgUserCopia);
     containerImgAndUser.appendChild(nameUser);
 
     // Botón de opciones de editar y eliminar
@@ -315,9 +316,9 @@ export const wallZone = () => {
     containerComent.classList.add('containerComent');
     containerComent.setAttribute('id', 'containerComent');
 
-    // const imgUserCopia2 = imgUserForm.cloneNode(true);
-    // imgUserCopia2.classList.add('imgUserCopia2');
-    // containerComent.appendChild(imgUserCopia2);
+    const imgUserCopia2 = imgUserCopia.cloneNode(true);
+    imgUserCopia2.classList.add('imgUserCopia2');
+    containerComent.appendChild(imgUserCopia2);
 
     const coment = document.createElement('input');
     coment.classList.add('coment');
@@ -350,6 +351,14 @@ export const wallZone = () => {
     iconShare.classList.add('iconPost');
     iconShare.setAttribute('id', 'iconShare');
     divContainerIconPost.appendChild(iconShare);
+
+    let likeCount;
+    const handleLikeClick = () => {
+      likeCount++;
+      iconCarrot.setAttribute('title', `Likes: ${likeCount}`);
+    };
+
+    iconCarrot.addEventListener('click', handleLikeClick);
 
     divContainerPostElement.appendChild(divContainerIconPost);
 
