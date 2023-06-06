@@ -1,6 +1,6 @@
 // import { async } from 'regenerator-runtime';
 import {
-  firebaseUser, savePost, getPosts, deletePost, editPost,
+  firebaseUser, savePost, getPosts, deletePost,
 } from '../firebase.js';
 
 export const header = () => {
@@ -39,9 +39,8 @@ export const header = () => {
 };
 
 /** **************** ZONA DE MURO DE PUBLICACIONES**************** */
-const createShareEdit = () => {
+const createShareEdit = (content = 'prueba') => {
   const divContainerWall = document.createElement('div');
-
   const closePopupPublish = document.createElement('img');
   closePopupPublish.className = 'closePopupPublish';
   closePopupPublish.setAttribute('src', '../../icon/cancel.png');
@@ -60,6 +59,9 @@ const createShareEdit = () => {
   newPostText.setAttribute('cols', '30');
   newPostText.setAttribute('rows', '10');
   newPostText.setAttribute('placeholder', 'Publica algo aquí...');
+  console.log(content, 'desde aqui');
+  newPostText.value = content;
+  console.log(newPostText);
 
   const sharePhoto = document.createElement('img');
   sharePhoto.classList.add('share-icons');
@@ -106,6 +108,9 @@ const createShareEdit = () => {
 };
 
 let createPost;
+
+let isEdit;
+let contentInput;
 
 export const wallZone = () => {
   const sectionNodo = document.createElement('section');
@@ -191,6 +196,13 @@ export const wallZone = () => {
 
     li1.appendChild(editIcon);
     li1.appendChild(btnEdit);
+
+    btnEdit.addEventListener('click', () => {
+      isEdit = true;
+      contentInput = postData.content;
+      shareEditBox.style.display = 'block';
+      createShareEdit(contentInput);
+    });
 
     // Opción de eliminar
     const li2 = document.createElement('li');
@@ -291,7 +303,6 @@ export const wallZone = () => {
     });
 
     // funcion para borrar
-
     const btnsDeleteSure = containerDeletePost.querySelector('.btnSure');
     btnsDeleteSure.addEventListener('click', () => {
       // llamar a la funcion delte
@@ -346,36 +357,15 @@ export const wallZone = () => {
     postContainer.appendChild(divContainerPostElement);
   };
 
-  window.addEventListener('DOMContentLoaded', async () => {
+  const loadPost = async () => {
     // Obtener los datos existentes en ese momento
     const querySnapshot = await getPosts();
     querySnapshot.forEach((post) => {
       createPost(post.id, post.data());
     });
+  };
 
-    const editPost = (id, updatedContent) => {
-      const postRef = doc(db, 'posts', id);
-    
-      return updateDoc(postRef, { content: updatedContent })
-        .then(() => {
-          console.log('Document updated successfully!');
-        })
-        .catch((error) => {
-          console.error('Error updating document:', error);
-        });
-    };
-
-    // const btnsEdit = sectionNodo.querySelectorAll('.btnOptionEdit');
-    // btnsEdit.forEach((btn) => {
-    //   btn.addEventListener('click', async (e) => {
-    //     console.log(e.target.dataset.id);
-    //     const doc = await editPost(e.target.dataset.id);
-    //     console.log(doc.data);
-
-    //     // const post = doc.data();
-    //   });
-    // });
-  });
+  loadPost();
 
   return sectionNodo;
 };

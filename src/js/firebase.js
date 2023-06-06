@@ -53,6 +53,7 @@ export const firebaseGoogle = () => {
 };
 // getTaks
 export const getPosts = () => getDocs(collection(db, 'posts'));
+
 export const deletePost = (id) => deleteDoc(doc(db, 'posts', id));
 
 export const editPost = (id) => updateDoc(doc(db, 'posts', id));
